@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Override lokal untuk scoreboard */
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 8px;
+            color: #0f380f;
+            margin-bottom: 10px;
+            font-weight: bold;
+            padding: 0 5px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-center" style="display:flex; flex-direction:column; align-items:center; padding: 20px 0;">
+        
+        <div class="gameboy">
+            <div class="gb-header">
+                <div class="power-indicator"><div class="power-light"></div> POWER</div>
+                <div class="brand-top">Semangat Cantiikk</div>
+            </div>
+
+            <div class="screen-area">
+                <div class="screen-cover">
+                    <div class="battery-label">🔴 BATTERY</div>
+                    
+                    <div class="screen-display">
+                        
+                        <h3 class="pixel-title">Tetris</h3>
+                        
+                        <div class="score-board">
+                            <span>Score: <span id="score">0</span></span>
+                            <span>Lvl: 1</span>
+                        </div>
+
+                        <canvas id="tetris" width="160" height="240"></canvas>
+
+                        <div id="gameOverModal" class="game-over-modal">
+                            <h3 style="color:#ffff00; margin-bottom:10px; text-decoration:underline;">INGET YA!</h3>
+                            <p>
+                                Walaupun kamu kalah,<br>
+                                tapi kamu selalu menang<br>
+                                kok di hati aku, HEHE<br>
+                                ^_^
+                            </p>
+                            <p style="color: #ff4d4d; margin-top:10px;">I LOVE YOU <3</p>
+                            <button class="ok-btn" onclick="resetGame()">OK</button>
+                        </div>
+
+                        <div class="tetris-controls">
+                            <button class="t-btn btn-rotate" id="btn-rotate">ROTATE</button>
+                            
+                            <button class="t-btn" id="btn-left">&lt;</button>
+                            <button class="t-btn" id="btn-down" style="background:#ef4444;">v</button>
+                            <button class="t-btn" id="btn-right">&gt;</button>
+                        </div>
+                        
+                        <div class="nav-buttons-container">
+                            <button class="btn-action btn-back" onclick="window.location.href='index.html'">KEMBALI</button>
+                        </div>
+
+                    </div>
+                    
+                    <div class="screen-text-bottom">DOT MATRIX WITH STEREO SOUND</div>
+                </div>
+            </div>
+
+            <div class="game-controls-bottom">
+                <div class="d-pad"><div class="d-pad-h"></div><div class="d-pad-v"></div></div>
+                <div class="action-buttons-group">
+                    <div class="round-btn" style="margin-top:15px">B</div>
+                    <div class="round-btn" style="margin-bottom:5px">A</div>
+                </div>
+            </div>
+            <div class="speaker-grill"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+    </div>
+
+    <script src="tetris.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container-center" style="display:flex; flex-direction:column; align-items:center; padding: 30px 0;">
+        
+        <div class="gameboy">
+            <div class="gb-header">
+                <div class="power-indicator"><div class="power-light"></div> POWER</div>
+                <div class="brand-top">HI CANTIIKK</div>
+            </div>
+
+            <div class="screen-area">
+                <div class="screen-cover">
+                    <div class="battery-label">🔴 BATTERY</div>
+                    
+                    <div class="screen-display music-screen">
+                        <h3 class="pixel-title">Music Player</h3>
+                        
+                        <div class="gallery-scroll">
+                            
+                            <div class="music-card">
+                                <div class="album-wrapper">
+                                    <img id="album-art" src="photo/kolato.jpeg" alt="Album">
+                                </div>
+                                
+                                <div class="track-info">
+                                    <p id="song-title" class="scrolling-text">Pilih Lagu...</p>
+                                    <p id="artist-name">Wilona Felita Delfina</p>
+                                </div>
+
+                                <div class="controls-row">
+                                    <button class="ctrl-btn" onclick="prevSong()">⏮</button>
+                                    <button class="ctrl-btn play-big" onclick="togglePlay()" id="play-btn">▶</button>
+                                    <button class="ctrl-btn" onclick="nextSong()">⏭</button>
+                                </div>
+                            </div>
+
+                            <div class="playlist-header">PLAYLIST:</div>
+                            
+                            <div class="playlist-item" onclick="playTrack(0)" id="track-0">
+                                <span>01.</span> Happy Birthday
+                            </div>
+                            
+                            <div class="playlist-item" onclick="playTrack(1)" id="track-1">
+                                <span>02.</span> Hanya Kamu
+                            </div>
+                            
+                            <div class="playlist-item" onclick="playTrack(2)" id="track-2">
+                                <span>03.</span> Menggambarkan Kamu Bangeet
+                            </div>
+
+                        </div>
+
+                        <div class="nav-buttons-container">
+                            <button class="btn-action btn-next" onclick="window.location.href='index.html'">MENU UTAMA</button>
+                            <button class="btn-action btn-back" onclick="window.location.href='gallery.html'">KEMBALI</button>
+                        </div>
+
+                    </div>
+                    
+                    <div class="screen-text-bottom">DOT MATRIX WITH STEREO SOUND</div>
+                </div>
+            </div>
+
+            <div class="game-controls-bottom">
+                <div class="d-pad"><div class="d-pad-h"></div><div class="d-pad-v"></div></div>
+                <div class="action-buttons-group">
+                    <div class="round-btn" style="margin-top:15px">B</div>
+                    <div class="round-btn" style="margin-bottom:5px">A</div>
+                </div>
+            </div>
+            <div class="speaker-grill"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA LAGU ---
+        // PENTING: Pastikan file .mp3 ada di dalam folder 'public'
+        const songs = [
+            {
+                title: "Happy Birthday",
+                artist: "Spesial Untukmu",
+                file: "photo/hbd.mp3",  // Ganti dengan nama file aslimu
+                cover: "photo/kolato.jpeg" // Ganti dengan foto cover
+            },
+            {
+                title: "Pokonya Cuman, Hanya, Only kamu",
+                artist: "Pamungkas",
+                file: "photo/only one.mp3",
+                cover: "photo/milky verse.jpeg"
+            },
+            {
+                title: "Pokonya Menggambarkan Kamu Banget!",
+                artist: "Beautiful",
+                file: "photo/beautiful.mp3",
+                cover: "photo/kolato wilo.jpeg"
+            }
+        ];
+
+        let currentIdx = 0;
+        let isPlaying = false;
+        let audio = new Audio();
+
+        const titleEl = document.getElementById('song-title');
+        const artistEl = document.getElementById('artist-name');
+        const coverEl = document.getElementById('album-art');
+        const playBtn = document.getElementById('play-btn');
+
+        function loadSong(index) {
+            currentIdx = index;
+            audio.src = songs[index].file;
+            titleEl.innerText = songs[index].title;
+            artistEl.innerText = songs[index].artist;
+            
+            // Ganti cover jika ada, jika error pakai placeholder default
+            if(songs[index].cover) {
+                coverEl.src = songs[index].cover;
+            }
+
+            // Update Tampilan Playlist (Highlight yang aktif)
+            document.querySelectorAll('.playlist-item').forEach(el => el.classList.remove('active-track'));
+            document.getElementById(`track-${index}`).classList.add('active-track');
+        }
+
+        function togglePlay() {
+            // Cek jika audio src kosong (belum ada lagu dimuat)
+            if (!audio.src || audio.src === window.location.href) {
+                loadSong(0);
+            }
+
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = "▶";
+            } else {
+                audio.play().catch(error => {
+                    alert("Gagal memutar lagu. Cek nama file mp3!");
+                    console.log(error);
+                });
+                playBtn.innerText = "⏸";
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function playTrack(index) {
+            loadSong(index);
+            audio.play();
+            playBtn.innerText = "⏸";
+            isPlaying = true;
+        }
+
+        function nextSong() {
+            currentIdx = (currentIdx + 1) % songs.length;
+            playTrack(currentIdx);
+        }
+
+        function prevSong() {
+            currentIdx = (currentIdx - 1 + songs.length) % songs.length;
+            playTrack(currentIdx);
+        }
+
+        // Lanjut lagu berikutnya otomatis
+        audio.addEventListener('ended', nextSong);
+
+        // Load lagu pertama saat halaman dibuka (tapi jangan auto-play agar browser tidak blokir)
+        window.onload = () => {
+            if(songs.length > 0) loadSong(0);
+        };
+    </script>
+</body>
+</html>

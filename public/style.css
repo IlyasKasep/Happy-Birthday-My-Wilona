@@ -1,0 +1,325 @@
+:root {
+    --bg-body: #111;
+    --gb-body: #e6e6e6;      /* Warna Body Gameboy */
+    --screen-bg: #9bbc0f;    /* Hijau Layar Retro */
+    --screen-text: #0f380f;  /* Hijau Gelap Teks */
+    --neon-green: #4dff88;   /* Warna Hacker Loading */
+    --neon-yellow: #ffff00;
+    --btn-blue: #3b82f6;
+    --btn-red: #ef4444;
+    --btn-purple: #a855f7;
+    --btn-green: #4dff88;    /* Hijau Tombol */
+}
+
+body {
+    background-color: var(--bg-body);
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--screen-text);
+}
+
+/* =========================================
+   1. LOADING SCREEN (INDEX)
+   ========================================= */
+#loading-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000; z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 1s ease-out;
+}
+.terminal-box {
+    border: 2px solid var(--neon-green); padding: 30px; width: 300px; text-align: center;
+    box-shadow: 0 0 20px rgba(77, 255, 136, 0.2);
+}
+.glitch-text {
+    color: var(--neon-green); font-size: 20px; margin-bottom: 20px;
+    text-shadow: 2px 2px #0f380f; letter-spacing: 2px;
+}
+.status-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+.arrow { color: var(--neon-green); animation: blink 0.5s infinite; }
+.status-text { color: var(--neon-green); font-size: 8px; text-align: left; }
+.progress-border { border: 2px solid var(--neon-green); padding: 4px; height: 15px; margin-bottom: 5px; }
+.progress-bar {
+    background-color: var(--neon-green); height: 100%; width: 0%;
+    box-shadow: 0 0 10px var(--neon-green); transition: width 0.05s linear;
+}
+.percentage { color: var(--neon-green); font-size: 10px; text-align: right; margin-bottom: 15px; }
+.smile-text { color: var(--neon-yellow); font-size: 10px; margin-top: 15px; letter-spacing: 2px; animation: blink 1s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* =========================================
+   2. GAMEBOY GLOBAL STYLES (DIPERBESAR)
+   ========================================= */
+.gameboy {
+    background-color: var(--gb-body);
+    width: 380px; /* Lebar ditambah */
+    min-height: 750px; /* Tinggi ditambah agar Tetris muat */
+    padding: 30px;
+    border-radius: 15px 15px 50px 15px;
+    box-shadow: inset -5px -5px 20px rgba(0,0,0,0.1), 
+                0 0 50px rgba(255,255,255,0.1),
+                15px 15px 0px #222;
+    position: relative;
+    border: 2px solid #999;
+    display: flex; flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Header */
+.gb-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 15px; color: #b3b3b3; font-size: 10px;
+}
+.power-indicator { display: flex; align-items: center; gap: 5px; }
+.power-light { width: 8px; height: 8px; background: red; border-radius: 50%; box-shadow: 0 0 5px red; }
+.brand-top { font-style: italic; font-weight: bold; font-size: 14px; color: #555; }
+
+/* Layar Utama (Fleksibel) */
+.screen-area {
+    background-color: #555;
+    border-radius: 10px 10px 40px 10px;
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    position: relative;
+    flex-grow: 1; /* Mengisi ruang kosong */
+    display: flex; flex-direction: column;
+}
+.screen-cover {
+    background-color: #777; padding: 5px; border-radius: 4px; position: relative;
+    flex-grow: 1; display: flex; flex-direction: column;
+}
+.screen-display {
+    background-color: var(--screen-bg);
+    width: 100%;
+    height: auto; 
+    min-height: 320px; /* Tinggi minimum layar */
+    display: flex; flex-direction: column; align-items: center;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4);
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 3px);
+    box-sizing: border-box; padding: 10px;
+}
+
+/* Elemen Umum di Layar */
+.title-pixel, .pixel-title { 
+    font-size: 14px; color: #0f380f; text-shadow: 1px 1px #8bac0f;
+    margin-bottom: 10px; border-bottom: 2px solid #0f380f; width: 90%; text-align: center; padding-bottom: 5px;
+}
+.blink-text { font-size: 8px; animation: blink 1.2s infinite; color: var(--screen-text); }
+.pixel-heart { font-size: 20px; margin-top: 10px; }
+.screen-text-bottom { color: #fff; font-size: 7px; margin-top: 5px; text-align: center; letter-spacing: 1px; }
+.battery-label { position: absolute; right: 5px; top: 50%; color: #bbb; font-size: 7px; transform: translateY(-50%); }
+
+/* Tombol Menu Utama (Index) */
+.menu-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 30px; }
+.menu-btn {
+    border: none; padding: 12px 0; font-family: 'Press Start 2P'; font-size: 8px; color: white;
+    cursor: pointer; border-radius: 4px; box-shadow: 0 4px 0 rgba(0,0,0,0.3); transition: transform 0.1s;
+}
+.menu-btn:active { transform: translateY(4px); box-shadow: none; }
+.btn-blue { background: var(--btn-blue); } .btn-red { background: var(--btn-red); }
+.btn-purple { background: var(--btn-purple); } .btn-green { background: var(--btn-green); }
+
+/* Tombol Navigasi Umum (Next/Back) */
+.nav-buttons-container { width: 100%; margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+.btn-action {
+    width: 100%; padding: 10px; font-family: 'Press Start 2P'; font-size: 9px;
+    border: 2px solid #0f380f; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.3); border-radius: 4px;
+}
+.btn-next { background-color: #4dff88; color: #0f380f; }
+.btn-back { background-color: #ff4d4d; color: white; }
+.btn-action:active { transform: translateY(3px); box-shadow: none; }
+
+/* Hiasan Bawah Gameboy */
+.game-controls-bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding: 0 10px; opacity: 0.9; }
+.d-pad { width: 80px; height: 80px; position: relative; }
+.d-pad div { background: #333; position: absolute; border-radius: 3px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+.d-pad-h { width: 100%; height: 30px; top: 25px; left: 0; }
+.d-pad-v { width: 30px; height: 100%; top: 0; left: 25px; }
+.action-buttons-group { display: flex; gap: 12px; }
+.round-btn {
+    width: 35px; height: 35px; background: #d32f2f; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    font-size: 10px; color: rgba(0,0,0,0.3); box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+.speaker-grill { position: absolute; bottom: 20px; right: 20px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; transform: rotate(-25deg); }
+.speaker-grill span { width: 4px; height: 4px; background: rgba(0,0,0,0.2); border-radius: 50%; }
+
+/* =========================================
+   3. MESSAGE PAGE STYLES
+   ========================================= */
+.message-screen { justify-content: flex-start !important; padding-top: 15px !important; }
+.typing-area {
+    width: 100%; height: 160px; font-size: 10px; line-height: 1.6; text-align: left;
+    overflow-y: auto; color: #0f380f; margin-bottom: 15px; white-space: pre-wrap;
+    background: rgba(0,0,0,0.05); padding: 5px; border-radius: 4px; box-sizing: border-box;
+}
+.typing-area::-webkit-scrollbar { width: 6px; }
+.typing-area::-webkit-scrollbar-thumb { background: #0f380f; border-radius: 3px; }
+
+.nav-hidden { display: none; }
+.nav-show { display: flex; flex-direction: column; gap: 8px; width: 100%; animation: fadeIn 0.5s; margin-top: auto; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.btn-skip {
+    background-color: var(--btn-blue); color: white; font-family: 'Press Start 2P'; font-size: 9px;
+    padding: 10px; border: none; border-radius: 4px; cursor: pointer; box-shadow: 0 4px 0 #1e40af;
+    width: 60%; margin-top: auto; animation: blink 2s infinite;
+}
+
+/* Komentar Section */
+/* =========================================
+   4. COMMENT SECTION (BARU)
+   ========================================= */
+   .comment-section {
+    margin-top: 20px; 
+    width: 380px; /* Sama dengan lebar Gameboy */
+    background: #fff; 
+    padding: 20px;
+    border-radius: 10px; 
+    box-sizing: border-box; 
+    color: #333; 
+    font-family: sans-serif;
+    border: 4px solid #333;
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
+}
+
+.comment-section h4 {
+    font-family: 'Press Start 2P'; font-size: 10px; margin-bottom: 15px;
+    color: #4dff88; background: #333; padding: 10px; display: inline-block;
+}
+
+.comment-list { 
+    max-height: 200px; overflow-y: auto; font-size: 12px; margin-bottom: 15px; 
+    border: 2px solid #ddd; padding: 5px; background: #f9f9f9; text-align: left;
+}
+.comment-item { padding: 8px; border-bottom: 1px dashed #ccc; line-height: 1.4; font-size: 12px;}
+.comment-item strong { color: #008000; font-family: 'Courier New', Courier, monospace; }
+
+.input-group { display: flex; flex-direction: column; gap: 10px; }
+.input-group input, .input-group textarea { 
+    width: 100%; padding: 10px; border: 2px solid #333; 
+    box-sizing: border-box; font-family: 'Courier New', Courier, monospace; font-size: 12px;
+}
+.send-btn { 
+    width: 100%; background: var(--btn-green); color: #000; border: 2px solid #333; 
+    padding: 12px; cursor: pointer; font-family: 'Press Start 2P'; font-size: 10px; 
+    box-shadow: 4px 4px 0px #333; 
+}
+.send-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #333; }
+
+/* =========================================
+   4. GALLERY & VIDEO STYLES
+   ========================================= */
+.gallery-scroll {
+    width: 100%; height: 180px; overflow-y: auto; display: flex; flex-direction: column; align-items: center;
+    gap: 15px; padding: 5px; margin-bottom: 10px; box-sizing: border-box;
+}
+.gallery-scroll::-webkit-scrollbar { width: 5px; }
+.gallery-scroll::-webkit-scrollbar-thumb { background: #0f380f; border-radius: 3px; }
+
+.photo-card {
+    background: #fff; padding: 5px 5px 15px 5px; width: 90%;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.3); transform: rotate(-2deg);
+    transition: transform 0.2s, z-index 0.2s; border: 1px solid #ccc; box-sizing: border-box;
+}
+.photo-card:hover { transform: rotate(0deg) scale(1.02); z-index: 10; border: 2px solid var(--btn-green); }
+.photo-card img { width: 100%; height: auto; display: block; border: 1px solid #eee; filter: sepia(10%) contrast(110%); }
+
+.video-card {
+    background: #222; padding: 5px; width: 90%;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.4); transform: rotate(2deg);
+    border: 2px solid #fff; box-sizing: border-box;
+}
+.video-wrapper { width: 100%; background: #000; display: flex; justify-content: center; align-items: center; position: relative; }
+.video-wrapper video { width: 100%; max-height: 140px; display: block; opacity: 0.6; }
+.play-icon { position: absolute; font-size: 24px; color: rgba(255,255,255,0.8); z-index: 2; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+.caption { font-family: 'Courier New', Courier, monospace; font-size: 9px; text-align: center; margin-top: 8px; font-weight: bold; color: #333; }
+.video-card .caption { color: #eee; }
+.clickable-media { cursor: pointer; }
+
+/* Modal Lightbox */
+.modal-overlay {
+    display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; flex-direction: column; animation: fadeInModal 0.3s ease;
+}
+.modal-overlay.active { display: flex; }
+.modal-content { margin: auto; display: block; max-width: 90%; max-height: 80vh; border: 3px solid #fff; box-shadow: 0 0 20px rgba(255,255,255,0.2); animation: zoomIn 0.3s ease; }
+.close-btn { position: absolute; top: 20px; right: 30px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 10001; }
+@keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.8); } to { transform: scale(1); } }
+
+/* =========================================
+   5. MUSIC PLAYER STYLES
+   ========================================= */
+.music-screen { justify-content: flex-start !important; padding-top: 10px !important; }
+
+.music-card {
+    background: #222; width: 90%; padding: 10px; border: 2px solid #fff; border-radius: 5px;
+    display: flex; flex-direction: column; align-items: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); margin-bottom: 10px;
+}
+.album-wrapper {
+    width: 80px; height: 80px; border: 2px solid #fff; border-radius: 50%; overflow: hidden; margin-bottom: 8px;
+    animation: spin 4s linear infinite; animation-play-state: paused;
+}
+.album-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.track-info { text-align: center; width: 100%; margin-bottom: 8px; }
+#song-title { color: #4dff88; font-size: 10px; margin-bottom: 4px; font-weight: bold; }
+#artist-name { color: #ccc; font-size: 7px; }
+
+.controls-row { display: flex; gap: 15px; background: #333; padding: 5px 15px; border-radius: 20px; border: 1px solid #555; }
+.ctrl-btn { background: none; border: none; color: #fff; font-size: 12px; cursor: pointer; transition: transform 0.1s; }
+.ctrl-btn:active { transform: scale(0.9); }
+.play-big { font-size: 16px; color: var(--neon-green); }
+
+.playlist-header { width: 90%; text-align: left; font-size: 8px; color: #0f380f; margin-bottom: 5px; font-weight: bold; border-bottom: 1px solid #0f380f; }
+.playlist-item {
+    background: #fff; width: 90%; padding: 8px; margin-bottom: 6px; border: 1px solid #0f380f;
+    font-family: 'Press Start 2P'; font-size: 7px; color: #333; cursor: pointer;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.2); display: flex; align-items: center; gap: 5px;
+}
+.playlist-item:active { transform: translateY(2px); box-shadow: none; }
+.playlist-item span { font-weight: bold; color: var(--btn-blue); }
+.active-track { background: var(--btn-green) !important; border: 2px solid #0f380f !important; color: #000 !important; }
+.active-track span { color: #000; }
+
+/* =========================================
+   6. TETRIS GAME STYLES
+   ========================================= */
+canvas {
+    border: 2px solid #0f380f; background-color: #000; display: block; margin: 5px auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); max-width: 100%;
+}
+
+.tetris-controls {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px;
+    width: 100%; justify-items: center; z-index: 10;
+}
+.t-btn {
+    background: #3b82f6; border: 2px solid #0f380f; color: white;
+    width: 50px; height: 50px; font-family: 'Press Start 2P'; font-size: 14px;
+    cursor: pointer; box-shadow: 0 4px 0 #1e40af; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+}
+.t-btn:active { transform: translateY(3px); box-shadow: none; }
+
+.btn-rotate {
+    width: 100%; grid-column: span 3; margin-bottom: 5px;
+    background: #a855f7; box-shadow: 0 4px 0 #7e22ce; font-size: 10px;
+}
+#btn-down { background: #ef4444; box-shadow: 0 4px 0 #b91c1c; }
+
+/* Modal Game Over */
+.game-over-modal {
+    display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 90%; background: #000; border: 2px solid #ffff00; padding: 20px;
+    text-align: center; z-index: 100; box-shadow: 0 0 20px rgba(0,0,0,0.9);
+    font-size: 10px; color: #4dff88; line-height: 1.6;
+}
+.ok-btn {
+    background: #3b82f6; color: white; border: 1px solid #fff;
+    padding: 10px 20px; margin-top: 15px; font-family: 'Press Start 2P'; cursor: pointer;
+}
